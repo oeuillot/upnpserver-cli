@@ -1,0 +1,34 @@
+{
+  "name": "upnpserver-cli",
+  "version": "1.2.0",
+  "description": "Command line for simple Upnpserver server",
+  "bin": {
+  	"upnpserver": "./bin/upnpserver"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:oeuillot/upnpserver-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oeuillot/upnpserver-cli/issues"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+	  "upnpserver": ">=1.2",
+		"commander": "2.2"
+	},
+	"devDependecies": {	 
+	},
+  "keywords": [
+    "Node.js",
+    "ushare",
+    "mediatomb",
+    "upnp",
+    "upnpserver"
+  ],
+  "author": "Olivier Oeuillot",
+  "license": "BSD",
+  "readmeFilename": "README.md"
+}
