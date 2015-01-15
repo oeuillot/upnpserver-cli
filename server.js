@@ -6,31 +6,31 @@ var Server = require("upnpserver");
 var directories = [];
 
 commander.option("-d, --directory <path>", "Mount directory", function(path) {
-  var mountPoint = null;
-  var idx = path.indexOf("=");
-  if (idx > 0) {
-    mountPoint = path.substring(0, idx);
-    path = path.substring(idx + 1);
-  }
+	var mountPoint = null;
+	var idx = path.indexOf("=");
+	if (idx > 0) {
+		mountPoint = path.substring(0, idx);
+		path = path.substring(idx + 1);
+	}
 
-  directories.push({
-    path : path,
-    mountPoint : mountPoint
-  });
+	directories.push({
+		path: path,
+		mountPoint: mountPoint
+	});
 });
 commander.option("-m, --music <path>", "Mount music directory", function(path) {
-  var mountPoint = null;
-  var idx = path.indexOf("=");
-  if (idx > 0) {
-    mountPoint = path.substring(0, idx);
-    path = path.substring(idx + 1);
-  }
+	var mountPoint = null;
+	var idx = path.indexOf("=");
+	if (idx > 0) {
+		mountPoint = path.substring(0, idx);
+		path = path.substring(idx + 1);
+	}
 
-  directories.push({
-    type : "music",
-    path : path,
-    mountPoint : mountPoint
-  });
+	directories.push({
+		type: "music",
+		path: path,
+		mountPoint: mountPoint
+	});
 });
 
 commander.option("-n, --name <name>", "Name of server");
@@ -45,21 +45,21 @@ commander.option("--profiler", "Enable memory profiler dump");
 commander.option("--heapDump", "Enable heap dump (require heapdump)");
 
 commander.option("-p, --httpPort <port>", "Http port", function(v) {
-  return parseInt(v, 10);
+	return parseInt(v, 10);
 });
 
 commander.dlna = !!commander.dlna;
 if (!commander.uuid) {
-  commander.uuid = "142f98b7-c28b-4b6f-8ca2-b55d9f0657e3";
+	commander.uuid = "142f98b7-c28b-4b6f-8ca2-b55d9f0657e3";
 }
 
 try {
-  commander.parse(process.argv);
+	commander.parse(process.argv);
 } catch (x) {
-  console.error("Exception while parsing", x);
+	console.error("Exception while parsing", x);
 }
 
-//commander.garbageItems = true;
+// commander.garbageItems = true;
 
 // Create an UpnpServer with options
 
@@ -67,52 +67,50 @@ var server = new Server(commander, directories);
 
 server.start();
 
-server.on("waiting",
-    function() {
-      console.log("Waiting connexions on port " +
-          server.httpServer.address().port);
-    });
+server.on("waiting", function() {
+	console.log("Waiting connexions on port " + server.httpServer.address().port);
+});
 
 // Catch nodejs problem or signals
 
 var stopped = false;
 
 process.on('SIGINT', function() {
-  console.log('disconnecting...');
-  stopped = true;
+	console.log('disconnecting...');
+	stopped = true;
 
-  server.stop();
+	server.stop();
 
-  setTimeout(function() {
-    process.exit();
-  }, 1000);
+	setTimeout(function() {
+		process.exit();
+	}, 1000);
 });
 
 process.on('uncaughtException', function(err) {
-  if (stopped) {
-    process.exit(0);
-    return;
-  }
-  console.error('Caught exception: ' + err);
+	if (stopped) {
+		process.exit(0);
+		return;
+	}
+	console.error('Caught exception: ', err);
 });
 
 // Try to profile upnpserver manually !
 
-if (commander.profiler) {	
+if (commander.profiler) {
 	setInterval(function() {
-	  console.log(util.inspect(process.memoryUsage()));
+		console.log(util.inspect(process.memoryUsage()));
 	}, 1000 * 30);
 }
 
-if (commander.headDump) {
-  var heapdump = require("heapdump");
-  console.log("***** HEAPDUMP enabled **************");
+if (commander.heapDump) {
+	var heapdump = require("heapdump");
+	console.log("***** HEAPDUMP enabled **************");
 
-  setInterval(function() {
-    var memMB = process.memoryUsage().rss / 1048576;
-    if (memMB > nextMBThreshold) {
-      heapdump.writeSnapshot();
-      nextMBThreshold += 100
-    }
-  }, 1000 * 60 * 10);
+	setInterval(function() {
+		var memMB = process.memoryUsage().rss / 1048576;
+		if (memMB > nextMBThreshold) {
+			heapdump.writeSnapshot();
+			nextMBThreshold += 100
+		}
+	}, 1000 * 60 * 10);
 }
