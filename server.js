@@ -33,6 +33,21 @@ commander.option("-m, --music <path>", "Mount music directory", function(path) {
 	});
 });
 
+commander.option("-v, --video <path>", "Mount video directory", function(path) {
+  var mountPoint = null;
+  var idx = path.indexOf("=");
+  if (idx > 0) {
+      mountPoint = path.substring(0, idx);
+      path = path.substring(idx + 1);
+  }
+
+  directories.push({
+      type: "video",
+      path: path,
+      mountPoint: mountPoint
+  });
+});
+
 commander.option("-n, --name <name>", "Name of server");
 commander.option("-u, --uuid <uuid>", "UUID of server");
 commander.option("--dlna", "Enable dlna support");
@@ -76,6 +91,10 @@ server.on("waiting", function() {
 var stopped = false;
 
 process.on('SIGINT', function() {
+	if (stopped) {
+		return;
+	}
+
 	console.log('disconnecting...');
 	stopped = true;
 
@@ -105,6 +124,8 @@ if (commander.profiler) {
 if (commander.heapDump) {
 	var heapdump = require("heapdump");
 	console.log("***** HEAPDUMP enabled **************");
+
+	var nextMBThreshold = 100;
 
 	setInterval(function() {
 		var memMB = process.memoryUsage().rss / 1048576;
