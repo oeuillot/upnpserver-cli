@@ -74,6 +74,12 @@ try {
 	console.error("Exception while parsing", x);
 }
 
+if(!commander.args.length) {
+    commander.help();
+} else {
+    console.log('Keywords: ' + program.args);
+}
+
 // commander.garbageItems = true;
 
 // Create an UpnpServer with options
