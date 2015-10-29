@@ -1,10 +1,12 @@
 var util = require('util');
+var pkg = require('./package');
 var commander = require("commander");
 
 var Server = require("upnpserver");
 
 var directories = [];
 
+commander.version(pkg.version);
 commander.option("-d, --directory <path>", "Mount directory", function(path) {
 	var mountPoint = null;
 	var idx = path.indexOf("=");
@@ -79,7 +81,6 @@ if(!commander.args.length) {
 } else {
     console.log('Keywords: ' + program.args);
 }
-
 // commander.garbageItems = true;
 
 // Create an UpnpServer with options
