@@ -19,6 +19,7 @@ commander.option("-d, --directory <path>", "Mount directory", function(path) {
 		path: path,
 		mountPoint: mountPoint
 	});
+	return path;
 });
 commander.option("-m, --music <path>", "Mount music directory", function(path) {
 	var mountPoint = null;
@@ -76,10 +77,10 @@ try {
 	console.error("Exception while parsing", x);
 }
 
-if(!commander.args.length) {
+if(!directories.length) {
     commander.help();
 } else {
-    console.log('Keywords: ' + program.args);
+    console.log('Keywords: ' + commander.args);
 }
 // commander.garbageItems = true;
 
